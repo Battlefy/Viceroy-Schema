@@ -1,0 +1,37 @@
+{
+  "name": "viceroy-schema",
+  "version": "0.0.2",
+  "description": "Viceroy-ORM's schema implementation",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/tape ./test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/Battlefy/Viceroy-Schema.git"
+  },
+  "author": "Robert Hurst <robertwhurst@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Battlefy/Viceroy-Schema/issues"
+  },
+  "homepage": "https://github.com/Battlefy/Viceroy-Schema",
+  "devDependencies": {
+    "tape": "~2.4.2"
+  },
+  "dependencies": {
+    "deep-equal": "^0.2.1"
+  },
+  "testling": {
+    "files": "test/*.js",
+    "browsers": [
+      "ie/10..latest",
+      "chrome/22..latest",
+      "firefox/16..latest",
+      "safari/5.0.5..latest",
+      "opera/11.0..latest",
+      "iphone/6..latest",
+      "ipad/6..latest"
+    ]
+  }
+}
