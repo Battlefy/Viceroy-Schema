@@ -11,7 +11,7 @@ Use it with node or in the browser using
 browserify.
 
 ```shell
-npm install viceroy-query
+npm install viceroy-schema
 ```
 
 [![NPM version](https://badge.fury.io/js/viceroy-schema.png)](http://badge.fury.io/js/viceroy-schema)
