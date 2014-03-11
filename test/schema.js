@@ -127,14 +127,14 @@ test('schema.validate()', function(t) {
     { schema: { field: { field: String }}, obj: {}, expected: { field: 'Must be an instance of Object' }},
     { schema: { field: { field: String }}, obj: { field: '' }, expected: { field: 'Must be an instance of Object' }},
     { schema: { field: { field: String }}, obj: { field: {} }, expected: null },
-    { schema: { field: { field: { type: String, match: { exists: true }}}}, obj: { field: {} }, expected: { 'field.field': 'Must exist' }},
-    { schema: { field: { field: String }}, obj: { field: { field: 1 } }, expected: { 'field.field': 'Must be an instance of String' }},
+    { schema: { field: { field: { type: String, match: { exists: true }}}}, obj: { field: {} }, expected: { field: { field: 'Must exist' }}},
+    { schema: { field: { field: String }}, obj: { field: { field: 1 } }, expected: { field: { field: 'Must be an instance of String' }}},
     { schema: { field: { field: String }}, obj: { field: { field: '' } }, expected: null },
     { schema: { field: [{ field: String }] }, obj: {}, expected: { field: 'Must be an instance of Array' }},
     { schema: { field: [{ field: String }] }, obj: { field: {} }, expected: { field: 'Must be an instance of Array' } },
     { schema: { field: [{ field: String }] }, obj: { field: { field: '' } }, expected: { field: 'Must be an instance of Array' } },
     { schema: { field: [{ field: String }] }, obj: { field: [] }, expected: null },
-    { schema: { field: [{ field: String }] }, obj: { field: [{ field: 1 }] }, expected: { 'field[0].field': 'Must be an instance of String' } },
+    { schema: { field: [{ field: String }] }, obj: { field: [{ field: 1 }] }, expected: { field: [{ field: 'Must be an instance of String' }] }},
     { schema: { field: [{ field: String }] }, obj: { field: [{ field: '' }] }, expected: null },
 
     { schema: { field: String }, obj: { field: '' }, expected: null },
@@ -215,10 +215,26 @@ test('schema.validate()', function(t) {
     schema = createSchema(test.schema);
     schema.validate(test.obj, function(errors) {
       if(test.expected) {
-        t.ok(errors, 't' + (i + 1));
-        for(var path in test.expected) {
-          t.ok(errors[path], 't' + (i + 1));
-          t.equal(errors[path].message, test.expected[path]);
+        if(
+          test.expected !== null && errors !== null &&
+          typeof test.expected == 'object' && typeof errors == 'object'
+        ) {
+          (function rec(expected, errors) {
+            for(var prop in expected) {
+              if(
+                expected[prop] !== null &&
+                errors[prop] !== null &&
+                typeof expected[prop] == 'object' &&
+                typeof errors[prop] == 'object'
+              ) {
+                rec(expected[prop], errors[prop]);
+              } else {
+                t.equal(errors[prop].message, expected[prop], 't' + (i + 1));
+              }
+            }
+          })(test.expected, errors);
+        } else {
+          t.equal(test.expected, errors, 't' + (i + 1));
         }
       } else {
         t.error(errors);
