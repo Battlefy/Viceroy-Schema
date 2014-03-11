@@ -213,31 +213,11 @@ test('schema.validate()', function(t) {
   for(var i = 0; i < tests.length; i += 1) {
     var test = tests[i];
     schema = createSchema(test.schema);
-    schema.validate(test.obj, function(errors) {
+    schema.validate(test.obj, function(err) {
       if(test.expected) {
-        if(
-          test.expected !== null && errors !== null &&
-          typeof test.expected == 'object' && typeof errors == 'object'
-        ) {
-          (function rec(expected, errors) {
-            for(var prop in expected) {
-              if(
-                expected[prop] !== null &&
-                errors[prop] !== null &&
-                typeof expected[prop] == 'object' &&
-                typeof errors[prop] == 'object'
-              ) {
-                rec(expected[prop], errors[prop]);
-              } else {
-                t.equal(errors[prop].message, expected[prop], 't' + (i + 1));
-              }
-            }
-          })(test.expected, errors);
-        } else {
-          t.equal(test.expected, errors, 't' + (i + 1));
-        }
+        t.deepEqual(test.expected, err.errors, 't' + i);
       } else {
-        t.error(errors);
+        t.error(err, 't' + i);
       }
     });
   }
@@ -253,10 +233,8 @@ test('schema.validate()', function(t) {
       }
     }
   });
-  schema.validate({ field: '' }, function(errors) {
-    t.ok(errors);
-    t.ok(errors.field);
-    t.equal(errors.field.message, 'test err');
+  schema.validate({ field: '' }, function(err) {
+    t.equal(err.errors.field, 'test err');
     t.end();
   });
 });
