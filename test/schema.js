@@ -10,10 +10,8 @@ test('Schema()', function(t) {
   t.throws(function() { createSchema(null); });
   t.throws(function() { createSchema(1); });
   t.throws(function() { createSchema('s'); });
-  t.throws(function() { createSchema({ field: {} }); });
   t.throws(function() { createSchema({ field: { invalid: true } }); });
-  t.throws(function() { createSchema({}); });
-  t.doesNotThrow(function() { createSchema({ field: String }); });
+  t.doesNotThrow(function() { createSchema({}); });
 
   var schema = createSchema({ field: String });
   t.equal(typeof schema.rules.field, 'object');
