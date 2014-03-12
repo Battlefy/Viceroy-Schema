@@ -68,9 +68,11 @@ s.validate(sue, function(err) {
   // The err object contains paths to
   // each schema rule error.
   err => {
-    'name.last': Error('Must be an instance of String'),
-    born: Error('Must be an instance of Date'),
-    sex: Error('Must be one of the following values: \'M\', \'F\'')
+    name: {
+      last: 'Must be an instance of String'
+    },
+    born: 'Must be an instance of Date',
+    sex: 'Must be one of the following values: \'M\', \'F\''
   };
 });
 ```
