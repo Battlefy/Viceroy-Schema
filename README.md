@@ -24,7 +24,7 @@ Example
 var schema = require('viceroy-schema');
 
 // create a schema for a person object.
-var s = schema({
+var s = schema.create({
   name: {
     first: String,
     last: String
